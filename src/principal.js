@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react"
 import Header from "./componentes/Header"
 import ItemListContainer from "./componentes/ItemListContainer"
 import Footer from "./componentes/Footer"
+import Main from "./componentes/Main"
 import ProductosContainer from "./componentes/ProductosContainer"
 import { BrowserRouter } from "react-router-dom"
-import { Route, Routes } from "react-router-dom"
+import CustomProvider from "./componentes/CustomProvider"
+
 
 
 
@@ -32,24 +34,17 @@ function Algo(){
         console.log(pedido)}
     return (
 <>
+<CustomProvider>
 <BrowserRouter>
 <Header/>
-<main>
-    <Routes>
-
-                <Route path="/" element={<ItemListContainer/>}/>
-		        <Route path="/productos"  element={<ItemListContainer/>}/>
-                <Route path="/productos/:cat"  element={<ItemListContainer/>}/>
-                <Route path='*' element={<h1>404</h1>}/>
-
-    </Routes>
-</main>
+<Main/>
 <ItemListContainer title="Dream Store"/>
 <ProductosContainer/>
 <button onClick={getPhrase}>Obtener frase del comandante</button>
 <p>{phrase}</p>
 <Footer/>
 </BrowserRouter>
+</CustomProvider>
 </>      
     ) 
     

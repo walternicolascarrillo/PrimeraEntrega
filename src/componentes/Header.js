@@ -5,7 +5,7 @@ function Header(){
     return (
       <header id="header" >
         <h1>Bienvenidos al Himalaya</h1>
-        <NavBar/>
+        <NavBar isHeader/>
       </header>
     ) 
     

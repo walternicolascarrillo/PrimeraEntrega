@@ -1,11 +1,52 @@
-import React from "react";
+import { collection, getDocs, query, where } from "firebase/firestore"
+import { useEffect, useState } from "react"
+import { useParams } from "react-router-dom"
+import { db } from "./firebase"
+import ItemList from "./ItemList"
 
-const ItemListContainer = (prop) => {
-  return (
-    <main>
-        <h2> Welcome to {prop.title}! you are our first costumer of the day, cash your price! </h2>
-    </main>
-  );
-};
+const ItemListContainer = () => {
 
-export default ItemListContainer;
+    const [items, setItems] = useState([])
+    const { cat } = useParams()
+
+    useEffect(() => {
+
+        const productosCollection = collection(db, "productos")
+
+        if (cat) {
+            const filtro = query(productosCollection, where("category", "==", cat))
+            const consulta = getDocs(filtro)
+            consulta
+                .then((resultado) => {
+                    const productos = resultado.docs.map(doc => ({ ...doc.data(), id: doc.id }))
+                    setItems(productos)
+                })
+                .catch((error) => {
+                    console.log(error)
+                })
+
+        } else {
+            const consulta = getDocs(productosCollection)
+            consulta
+                .then((resultado) => {
+                    const productos = resultado.docs.map(doc => ({ ...doc.data(), id: doc.id }))
+                    setItems(productos)
+                })
+                .catch((error) => {
+                    console.log(error)
+                })
+
+        }
+
+    }, [cat])
+
+    return (
+        <div>
+            <h2>Productos</h2>
+            {items.length == 0 ? <h1>Cargando...</h1> : <ItemList items={items} />}
+        </div>
+    )
+
+}
+
+export default ItemListContainer
